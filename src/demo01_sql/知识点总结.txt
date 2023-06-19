@@ -1,0 +1,19 @@
+2. MySQL 使用三值逻辑 —— TRUE, FALSE 和 UNKNOWN。
+-- 任何与 NULL 值进行的比较都会与第三种值 UNKNOWN 做比较。
+-- 这个“任何值”包括 NULL 本身！这就是为什么 MySQL 提供 IS NULL 和 IS NOT NULL 两种操作来对 NULL 特殊判断。
+
+5. char_length(str) 与 length(str) 的区别
+-- char_length(str) （1）计算单位：字符
+                    （2）不管汉字还是数字或者是字母都算是一个字符
+-- length(str) （1）计算单位：字节
+               （2）utf8编码：一个汉字三个字节，一个数字或字母一个字节。
+               （3）gbk编码：一个汉字两个字节，一个数字或字母一个字节。
+
+6. 给查询字段赋默认值
+-- ifnull(euni.unique_id, null) as unique_id
+
+9. 日期比较函数 dateDiff
+-- datediff(wa.recordDate, wb.recordDate) = 1 比较前一个参数与后一个参数之间的日期时间差
+
+
+
