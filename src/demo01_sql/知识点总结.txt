@@ -15,5 +15,22 @@
 9. 日期比较函数 dateDiff
 -- datediff(wa.recordDate, wb.recordDate) = 1 比较前一个参数与后一个参数之间的日期时间差
 
+10. 取小数点后几位数字 round(number,digits)
+-- 如果 digits 大于 0，则四舍五入到指定的小数位。
+-- 如果 digits 等于 0，则四舍五入到最接近的整数。
+-- 如果 digits 小于 0，则在小数点左侧进行四舍五入。
 
+12. cross join 交叉连接
+-- 返回两个表连接的笛卡尔积
 
+12. group by 后添加多个条件时，用 "," 分隔
+
+13. having count(1) >= 5 用于筛选统计
+
+14. sum(if(action='confirmed',1, 0)) 求和筛选函数
+
+15. sql 求一个数是否为奇数
+-- mod(id,2) = 1
+-- (id % 2) = 1
+-- (id & 1) = 1
+-- id regexp '[13579]$' (正则表达式)

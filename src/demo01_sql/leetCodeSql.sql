@@ -50,10 +50,63 @@ from Weather wa
          left join Weather wb on datediff(wa.recordDate, wb.recordDate) = 1
 where wa.Temperature > wb.Temperature;
 
--- 10.
+-- 10. 计算每台机器各自完成一个进程任务的平均耗时
+select a.machine_id, round(avg(b.timestamp - a.timestamp), 3) as processing_time
+from Activity as a
+         left join Activity as b
+                   on a.machine_id = b.machine_id
+                       and a.process_id = b.process_id
+where a.activity_type = "start"
+  and b.activity_type = "end"
+group by a.machine_id;
 
+-- 11. 选出所有 bonus < 1000 的员工的 name 及其 bonus
+select e.name, b.bonus
+from Employee e
+         left join Bonus b on e.empId = b.empId
+where b.bonus < 1000
+   or b.bonus is null;
 
+-- 12. 查询出每个学生参加每一门科目测试的次数，结果按 student_id 和 subject_name 排序
+select stu.student_id           as student_id,
+       stu.student_name         as student_name,
+       sub.subject_name         as subject_name,
+       count(exam.subject_name) as attended_exams
+from Students as stu
+         cross join Subjects as sub
+         left join Examinations as exam
+                   on stu.student_id = exam.student_id and exam.subject_name = sub.subject_name
+group by stu.student_id, sub.subject_name
+order by stu.student_id;
 
+-- 13. 查询至少有5名直接下属的经理
+select name
+from Employee
+where id in
+      (select managerId from Employee group by managerId having count(1) >= 5);
 
+-- 14. 查找每个用户的 确认率
+select s.user_id, round(sum(if(action='confirmed',1, 0)) / count(s.user_id), 2) as confirmation_rate
+from Signups s
+         left join Confirmations con on s.user_id = con.user_id
+group by s.user_id;
 
+-- 15. 找出所有影片描述为非 boring (不无聊) 的并且 id 为奇数 的影片，结果请按等级 rating 排列
+select *
+from cinema
+where description != "boring" and  mod(id , 2) =1
+order by rating desc;
 
+-- 16. 查找每种产品的平均售价
+select p.product_id,
+       round(sum(p.price * u.units) / sum(u.units), 2) as average_price
+from Prices p
+         left join UnitsSold u on p.product_id = u.product_id
+where u.purchase_date between p.start_date and p.end_date
+group by p.product_id;
+
+-- 17. 查询每一个项目中员工的 平均 工作年限，精确到小数点后两位
+select p.project_id, round(avg(e.experience_years), 2) as average_years
+from Project p
+         left join Employee e on p.employee_id = e.employee_id
+group by p.project_id;
