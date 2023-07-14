@@ -110,3 +110,73 @@ select p.project_id, round(avg(e.experience_years), 2) as average_years
 from Project p
          left join Employee e on p.employee_id = e.employee_id
 group by p.project_id;
+
+-- 18. 查询各赛事的用户注册百分率，保留两位小数
+select contest_id, round(count(u.user_id) / (select count(*) from Users) * 100, 2) percentage
+from Users u
+         right join Register r on u.user_id = r.user_id
+group by r.contest_id
+order by percentage desc, contest_id asc;
+
+-- 19. 各查询结果的评分与其位置之间比率的平均值
+--     评分小于 3 的查询结果占全部查询结果的百分比。
+select query_name,
+       round(avg(rating / position), 2)                     as quality,
+       round(sum(if(rating < 3, 1, 0)) * 100 / count(*), 2) as poor_query_percentage
+from Queries
+group by query_name;
+
+-- 20. 查找每个月和每个国家/地区的事务数及其总金额、已批准的事务数及其总金额
+select date_format(trans_date, "%Y-%m") month,
+       country,
+       count(*)                               trans_count,
+       count(if(state = 'approved', 1, null)) approved_count,
+       sum(amount)                            trans_total_amount,
+       sum(if(state = 'approved', amount, 0)) approved_total_amount
+from Transactions
+group by month, country
+
+-- 21. 获取即时订单在所有用户的首次订单中的比例
+select round(sum(order_date = customer_pref_delivery_date) * 100 / count(*), 2) as immediate_percentage
+from Delivery
+where (customer_id, order_date) in (select customer_id, min(order_date)
+                                    from delivery
+                                    group by customer_id)
+
+-- 22. 报告在首次登录的第二天再次登录的玩家的比率，四舍五入到小数点后两位
+
+
+-- 23. 查询每位老师在大学里教授的科目种类的数量
+select teacher_id, count(distinct subject_id) as cnt
+from Teacher
+group by teacher_id;
+
+-- 24. 查询出截至 2019-07-27（包含2019-07-27），近 30 天的每日活跃用户数（当天只要有一条活动记录，即为活跃用户）
+select activity_date as day,
+count(distinct user_id) as active_users
+from Activity
+where
+    datediff('2019-7-27', activity_date) < 30
+  and activity_date <= '2019-07-27'
+group by activity_date;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
