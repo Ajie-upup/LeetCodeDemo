@@ -156,9 +156,13 @@ select activity_date as day,
 count(distinct user_id) as active_users
 from Activity
 where
-    datediff('2019-7-27', activity_date) < 30
+    (datediff( '2019-7-27'
+    , activity_date)
+    < 30)
   and activity_date <= '2019-07-27'
 group by activity_date;
+
+-- 25. 报告2019年春季才售出的产品。即仅在2019-01-01至2019-03-31（含）之间出售的商品
 
 
 
