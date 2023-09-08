@@ -1,0 +1,32 @@
+1. 0-1 背包
+题单：
+    有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次,第 i 件物品的体积是 vi，价值是 wi。
+    求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。
+
+public class Main {
+    public static void main(String[] args) {
+       Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] v = new int[n + 1];
+        int[] w = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            v[i] = sc.nextInt();
+            w[i] = sc.nextInt();
+        }
+        int[] pack = new int[m + 1];
+        for (int i = 1; i <= n; i++) {
+            // i 表示背包的容积
+            for (int j = m; j >= v[i]; j--) {
+                pack[j] = Math.max(pack[j], pack[j - v[i]] + w[i]);
+            }
+        }
+        System.out.println(pack[m]);
+    }
+}
+
+
+
+
+
+
